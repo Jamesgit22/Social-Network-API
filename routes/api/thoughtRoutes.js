@@ -53,7 +53,19 @@ router.put('/update-thought/:id', async (req, res) => {
   }
 });
 
-// Del : Delete a thought by _id.
-
+// Delete : Delete a thought by _id.
+router.delete('/delete-thought/:id', async (req, res) => {
+  try {
+    const deletedThought = await Thought.findByIdAndDelete(req.params.id);
+    res.status(200).json(deletedThought);
+  } catch (err) {
+    console.log(
+      'Error in deleting a thought by id from the database. Error: ' + err
+    );
+    res
+      .status(500)
+      .json({ message: 'Unable to delete thought from the database.' });
+  }
+});
 
 module.exports = router;
