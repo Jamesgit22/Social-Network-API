@@ -86,3 +86,5 @@ router.delete('/delete-user/:id', async (req, res) => {
         res.status(500).json({ message: 'Unable to delete the user and their associated thoughts.'})
     }
 });
+
+module.exports = router;
