@@ -61,5 +61,18 @@ router.post('/create-user', async (req, res) => {
 });
 
 // Put : Update a user by its _id.
+router.put('/update-user/:id', async (req, res) => {
+  try {
+    const updatedUser = await User.findOneAndUpdate(
+      { _id: req.params.id },
+      { friends: req.body.friends },
+      { new: true }
+    );
+    res.status(200).json(updatedUser);
+  } catch (err) {
+    console.log('Error in updating a user in the database. Error: ' + err);
+    res.status(500).json({ message: 'Unable to update the user in the database.' });
+  }
+});
 
 // Del : Delete a user by its _id. (BONUS: Also delete the users associated thoughts when user is deleted.)
