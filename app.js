@@ -7,6 +7,6 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-const router = require('./routes/index');
+const routes = require('./routes');
 
-app.use('/', router);
+app.use(routes);
