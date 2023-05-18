@@ -33,6 +33,29 @@ router.get('/thought/:id', async (req, res) => {
 });
 
 // Post : To create a new thought. Ensure to push the new thoughts _id field to the associated users thought array.
+router.post('/create-thought', async (req, res) => {
+  try {
+    const { thoughtText } = req.body;
+    if (!thoughtText) {
+      res
+        .status(400)
+        .json(
+          { message: 'Please ensure to enter valid text in order to update the thought.'}
+        );
+    }
+    const newThought = await Thought.create({
+      thoughtText: thoughtText,
+    });
+    res.status(200).json(newThought);
+  } catch (err) {
+    console.log(
+      'Error in creating a new thought in the database. Error: ' + err
+    );
+    res
+      .status(500)
+      .json({ message: 'Unable to create a new thought in the database.' });
+  }
+});
 
 // Put : update a thought by _id.
 router.put('/update-thought/:id', async (req, res) => {
