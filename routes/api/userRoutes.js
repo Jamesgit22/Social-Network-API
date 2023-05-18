@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { User } = require('../../models');
+const { User, Thought } = require('../../models');
 
 // Get : All users
 router.get('/all-users', async (req, res) => {
@@ -76,3 +76,13 @@ router.put('/update-user/:id', async (req, res) => {
 });
 
 // Del : Delete a user by its _id. (BONUS: Also delete the users associated thoughts when user is deleted.)
+router.delete('/delete-user/:id', async (req, res) => {
+    try {
+        const deletedThoughts = await Thought.deleteMany({_id: req.params.id});
+        const deletedUser = await User.findByIdAndDelete(req.params.id);
+        res.status(200).json(deletedUser);
+    } catch (err) {
+        console.log('Error in deleting a user and their thoughts from the database. Error: ' + err);
+        res.status(500).json({ message: 'Unable to delete the user and their associated thoughts.'})
+    }
+});
