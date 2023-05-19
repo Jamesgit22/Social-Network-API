@@ -42,7 +42,7 @@ module.exports = {
       }
       const newThought = await Thought.create({
         thoughtText: thoughtText,
-        userID: req.params.id
+        username: req.params.id,
       });
       const user = await User.findById(req.params.id);
       user.thoughts.push(newThought);
@@ -93,7 +93,13 @@ module.exports = {
   // Post to create a reaction to a thought
   async createReaction(req, res) {
     try {
-      const results = await Reaction.create;
+      const thought = await Thought.findByIdAndUpdate(
+        req.params.id, 
+        {
+        $addToSet: { reactions: req.body },
+        new: true,
+      });
+      res.status(200).json(thought);
     } catch (err) {
       console.log(err.message);
     }

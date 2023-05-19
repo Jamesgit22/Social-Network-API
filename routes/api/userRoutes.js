@@ -24,7 +24,7 @@ router.route('/update-user/:id').put(updateUsername);
 // Put : Add Friend by its _id.
 router.route('/:id/friends').post(addFriend);
 
-// Del : Delete a user by its _id. (BONUS: Also delete the users associated thoughts when user is deleted.)
+// Del : Delete a user by its _id and associated thoughts.
 router.route('/delete-user/:id').delete(deleteUser);
 
 module.exports = router;

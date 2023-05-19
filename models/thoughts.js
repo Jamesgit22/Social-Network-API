@@ -1,11 +1,13 @@
 const mongoose = require('mongoose');
+const reactionsSchema = require('./reactions')
 
 const thoughtSchema = new mongoose.Schema({
     thoughtText: {type: String, required: true, minLenght: 1, maxLenght: 280},
-    userID: { 
+    username: { 
         type: mongoose.SchemaTypes.ObjectId,
         ref: "User"
-        }
+        },
+    reactions: [reactionsSchema]
 },
 {
     timestamps: true

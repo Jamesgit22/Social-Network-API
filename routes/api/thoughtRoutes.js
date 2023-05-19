@@ -25,6 +25,6 @@ router.route('/update-thought/:id').put(updateThought);
 router.route('/delete-thought/:id').delete(deleteThought);
 
 // Post to create a reaction to a thought
-router.route('/thoughts/:id/reactions').post(createReaction);
+router.route('/:id/reactions').post(createReaction);
 
 module.exports = router;

@@ -8,6 +8,6 @@ const reactionSchema = new mongoose.Schema({
     timestamps: true
 });
 
-const Reaction = mongoose.model('Reaction', reactionSchema);
 
-module.exports = Reaction;
+
+module.exports = reactionSchema;

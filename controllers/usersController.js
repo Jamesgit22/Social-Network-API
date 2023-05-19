@@ -1,7 +1,7 @@
 const { User, Thought } = require('../models');
 
 module.exports = {
-    // Get : All users
+  // Get : All users
   async getAllUsers(req, res) {
     try {
       const results = await User.find({});
@@ -19,7 +19,11 @@ module.exports = {
     try {
       const results = await User.findById(req.params.id)
         .populate('friends')
-        .populate('thoughts');
+        .populate({
+          path: 'thoughts',
+          model: 'Thought',
+          populate: { path: 'reactions', model: 'Reaction' },
+        });
       if (!results) {
         res.status(404).json({
           message: 'Unable to locate a user by that _id. Please try again.',
@@ -89,11 +93,13 @@ module.exports = {
         .json({ message: 'Unable to add friend in the database.' });
     }
   },
-  // Del : Delete a user by its _id. (BONUS: Also delete the users associated thoughts when user is deleted.)
+  // Del : Delete a user by its _id and associated thoughts.
   async deleteUser(req, res) {
     try {
-        const deletedUser = await User.findByIdAndDelete(req.params.id);
-        const deletedThoughts = await Thought.deleteMany({ userID: req.params.id });
+      const deletedUser = await User.findByIdAndDelete(req.params.id);
+      const deletedThoughts = await Thought.deleteMany({
+        userID: req.params.id,
+      });
       res.status(200).json(deletedUser);
     } catch (err) {
       console.log(
