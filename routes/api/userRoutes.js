@@ -60,18 +60,31 @@ router.post('/create-user', async (req, res) => {
   }
 });
 
-// Put : Update a user by its _id.
+// Put : Update Username by _id.
 router.put('/update-user/:id', async (req, res) => {
   try {
     const updatedUser = await User.findOneAndUpdate(
       { _id: req.params.id },
-      { friends: req.body.friends },
+      { username: req.body.username },
       { new: true }
     );
     res.status(200).json(updatedUser);
   } catch (err) {
     console.log('Error in updating a user in the database. Error: ' + err);
     res.status(500).json({ message: 'Unable to update the user in the database.' });
+  }
+});
+
+// Put : Add Friend by its _id.
+router.post('/:id/friends', async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    user.friends.push(req.body.friend);
+    const updatedUser = await user.save();
+    res.status(200).json(updatedUser);
+  } catch(err) {
+    console.log(err.message);
+    res.status(500).json({ message: 'Unable to add friend in the database.'});
   }
 });
 

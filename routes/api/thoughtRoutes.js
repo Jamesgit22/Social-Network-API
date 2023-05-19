@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { Thought } = require('../../models');
+const { Thought, Reaction, User } = require('../../models');
 
 // Get : To get all thoughts.
 router.get('/all-thoughts', async (req, res) => {
@@ -33,7 +33,7 @@ router.get('/thought/:id', async (req, res) => {
 });
 
 // Post : To create a new thought. Ensure to push the new thoughts _id field to the associated users thought array.
-router.post('/create-thought', async (req, res) => {
+router.post('/create-thought/:id', async (req, res) => {
   try {
     const { thoughtText } = req.body;
     if (!thoughtText) {
@@ -46,6 +46,10 @@ router.post('/create-thought', async (req, res) => {
     const newThought = await Thought.create({
       thoughtText: thoughtText,
     });
+    const user = await User.findById(req.params.id);
+    user.thoughts.push(newThought);
+    const updatedUser = await user.save();
+
     res.status(200).json(newThought);
   } catch (err) {
     console.log(
@@ -90,5 +94,14 @@ router.delete('/delete-thought/:id', async (req, res) => {
       .json({ message: 'Unable to delete thought from the database.' });
   }
 });
+
+// Post to create a reaction to a thought
+router.post('/thoughts/:id/reactions', async (req, res) => {
+    try {
+        const results = await Reaction.create
+    } catch (err) {
+        console.log(err.message);
+    }
+})
 
 module.exports = router;
