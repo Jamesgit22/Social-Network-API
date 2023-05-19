@@ -10,8 +10,15 @@ const thoughtSchema = new mongoose.Schema({
     reactions: [reactionsSchema]
 },
 {
-    timestamps: true
+    timestamps: true,
+    toJSON: { virtuals: true } 
 });
+
+thoughtSchema.virtual('reactionsCount').get(function(){
+    return this.reactions.length;
+});
+
+
 
 const Thought = mongoose.model('Thought', thoughtSchema);
 

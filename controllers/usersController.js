@@ -18,7 +18,7 @@ module.exports = {
   async getOneUser(req, res) {
     try {
       const results = await User.findById(req.params.id)
-        .populate('friends')
+        .populate('friends',)
         .populate({
           path: 'thoughts',
           model: 'Thought',

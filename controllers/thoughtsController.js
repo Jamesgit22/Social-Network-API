@@ -1,4 +1,4 @@
-const { Thought, Reaction, User } = require('../models');
+const { Thought, reactionSchema, User } = require('../models');
 
 module.exports = {
   // Get : To get all thoughts.
@@ -93,9 +93,7 @@ module.exports = {
   // Post to create a reaction to a thought
   async createReaction(req, res) {
     try {
-      const thought = await Thought.findByIdAndUpdate(
-        req.params.id, 
-        {
+      const thought = await Thought.findByIdAndUpdate(req.params.id, {
         $addToSet: { reactions: req.body },
         new: true,
       });
@@ -104,4 +102,19 @@ module.exports = {
       console.log(err.message);
     }
   },
+  // Delete to remove a reaction by _id
+  async deleteReaction(req, res) {
+    try {
+      const thought = await Thought.findByIdAndUpdate(req.params.thoughtId, {
+        $pull: { reactions: { _id: req.params.reactionId } },
+        new: true,
+      });
+      res.status(200).json(thought);
+    } catch (err) {
+      console.log(err.message);
+      res
+        .status(500)
+        .json({ message: 'Unable to delete reaction from the database.' });
+    }
+  }
 };
