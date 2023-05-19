@@ -1,6 +1,7 @@
 const { User, Thought } = require('../models');
 
 module.exports = {
+    // Get : All users
   async getAllUsers(req, res) {
     try {
       const results = await User.find({});
@@ -13,6 +14,7 @@ module.exports = {
       });
     }
   },
+  // Get : A single user by _id and populate the users associated thoughts and friends.
   async getOneUser(req, res) {
     try {
       const results = await User.findById(req.params.id)
@@ -36,6 +38,7 @@ module.exports = {
         );
     }
   },
+  // Post: Create a new user.
   async createUser(req, res) {
     try {
       const { username, email } = req.body;
@@ -56,6 +59,7 @@ module.exports = {
         .json({ message: 'Error in creating a new user. Please try again.' });
     }
   },
+  // Put : Update Username by _id.
   async updateUsername(req, res) {
     try {
       const updatedUser = await User.findOneAndUpdate(
@@ -71,6 +75,7 @@ module.exports = {
         .json({ message: 'Unable to update the user in the database.' });
     }
   },
+  // Put : Add Friend by its _id.
   async addFriend(req, res) {
     try {
       const user = await User.findById(req.params.id);
@@ -84,10 +89,11 @@ module.exports = {
         .json({ message: 'Unable to add friend in the database.' });
     }
   },
+  // Del : Delete a user by its _id. (BONUS: Also delete the users associated thoughts when user is deleted.)
   async deleteUser(req, res) {
     try {
-      const deletedThoughts = await Thought.deleteMany({ _id: req.params.id });
-      const deletedUser = await User.findByIdAndDelete(req.params.id);
+        const deletedUser = await User.findByIdAndDelete(req.params.id);
+        const deletedThoughts = await Thought.deleteMany({ userID: req.params.id });
       res.status(200).json(deletedUser);
     } catch (err) {
       console.log(
